@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Calender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .calendar {
+            width: 300px;
+            margin: 0 auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar h2 {
+            font-size: 1.5rem;
+        }
+
+        .calendar table {
+            width: 100%;
+        }
+
+        .calendar th, .calendar td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .calendar th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .calendar td {
+            border: 1px solid #ccc;
+        }
+
+        .prev-month, .next-month {
+            cursor: pointer;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <h2 id="month-year"></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+        <span class="prev-month" onclick="previousMonth()">&#171; Previous Month</span>
+        <span class="next-month" onclick="nextMonth()">Next Month &#187;</span>
+    </div>
+
+    <script>
+        const calendarBody = document.getElementById('calendar-body');
+        const monthYearElement = document.getElementById('month-year');
+        let currentMonth = new Date();
+        
+        function generateCalendar(year, month) {
+            calendarBody.innerHTML = '';
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            monthYearElement.innerText = `${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(firstDay)} ${year}`;
+            let date = new Date(firstDay);
+
+            while (date <= lastDay) {
+                const row = document.createElement('tr');
+                for (let i = 0; i < 7; i++) {
+                    if (date.getDay() === i) {
+                        const cell = document.createElement('td');
+                        cell.innerText = date.getDate();
+                        row.appendChild(cell);
+                        date.setDate(date.getDate() + 1);
+                    } else {
+                        row.innerHTML += '<td></td>';
+                    }
+                }
+                calendarBody.appendChild(row);
+            }
+        }
+
+        function previousMonth() {
+            currentMonth.setMonth(currentMonth.getMonth() - 1);
+            generateCalendar(currentMonth.getFullYear(), currentMonth.getMonth());
+        }
+
+        function nextMonth() {
+            currentMonth.setMonth(currentMonth.getMonth() + 1);
+            generateCalendar(currentMonth.getFullYear(), currentMonth.getMonth());
+        }
+
+        generateCalendar(currentMonth.getFullYear(), currentMonth.getMonth());
+    </script>
+</body>
+</html>
